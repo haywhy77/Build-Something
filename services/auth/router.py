@@ -4,11 +4,11 @@ from typing import List
 from fastapi import HTTPException, APIRouter
 import fastapi as _fastapi
 import schemas as _schemas
-from email_service import send_email
+from utils.email_service import send_email
 import sqlalchemy.orm as _orm
 import service as _services
 import logging
-import database as _database
+import utils.database as _database
 from starlette.responses import RedirectResponse
 import json
 
@@ -45,8 +45,8 @@ async def create_user(
     #     body="Your RECIPE user account has been created successfully\nPlease login to activate your account."
     # )
     return _fastapi.HTTPException(
-            status_code=200,
-            detail="User Registered!")
+            status_code=201,
+            detail="User Registered, Please verify email to activate account !")
 
 
 @router.post("/auth/token" ,tags = ['User Auth'])

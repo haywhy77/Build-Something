@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: db-service
 spec:
+  clusterIP: None  # Headless service for direct pod access
+  ports:
+    - port: 3306
+      targetPort: 3306
   selector:
     app: db
-  ports:
-  - protocol: TCP
-    port: 3306
-    targetPort: 3306
-  type: ClusterIP

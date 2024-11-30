@@ -27,7 +27,7 @@ async def processRequest(
         if response.status_code == 200:
             return response.json()
         else:
-            raise HTTPException(status_code=response.status_code, detail=response.json())
+            raise HTTPException(status_code=response.status_code, detail=response.text)
     
     except requests.exceptions.ConnectionError as e:
         print("Exception: ", e)

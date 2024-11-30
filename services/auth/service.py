@@ -13,7 +13,8 @@ import json
 import pika
 import time
 import os
-import database as _database
+import utils.database as _database
+from sqlalchemy.exc import IntegrityError
 
 # Load environment variables
 JWT_SECRET = os.getenv("JWT_SECRET")
@@ -54,19 +55,31 @@ async def get_user_by_email(email: str, db: _orm.Session):
 
 
 async def create_user(user: _schemas.UserCreate, db: _orm.Session):
-    # Create a new user in the database
     try:
+        # Validate email
         valid = _email_check.validate_email(user.email)
         name = user.name
         email = valid.email
     except _email_check.EmailNotValidError:
-        raise _fastapi.HTTPException(status_code=404, detail="Please enter a valid email")
-
-    user_obj = _models.User(email=email, name=name, hashed_password=_hash.bcrypt.hash(user.password))
-    db.add(user_obj)
-    db.commit()
-    db.refresh(user_obj)
-    return user_obj
+        raise _fastapi.HTTPException(status_code=400, detail="Please enter a valid email")
+    
+    # Create user
+    try:
+        user_obj = _models.User(
+            email=email,
+            name=name,
+            hashed_password=_hash.bcrypt.hash(user.password)
+        )
+        db.add(user_obj)
+        db.commit()  # Commit changes
+        db.refresh(user_obj)  # Refresh the object with the latest DB state
+        return user_obj
+    except IntegrityError:
+        db.rollback()  # Rollback on error
+        raise _fastapi.HTTPException(status_code=400, detail="User with this email already exists.")
+    except Exception as e:
+        db.rollback()  # Rollback for any other error
+        raise _fastapi.HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
 async def authenticate_user(email: str, password: str, db: _orm.Session):
     # Authenticate a user
