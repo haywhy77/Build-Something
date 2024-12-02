@@ -12,4 +12,4 @@ spec:
   - protocol: TCP
     port: 80  # External service port
     targetPort: 8001  # Container port
-  type: LoadBalancer
+  type: ClusterIP

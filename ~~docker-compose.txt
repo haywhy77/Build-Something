@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   auth:
-    image: psudomic/auth:latest
+    image: deeaxfun2/auth:latest
     container_name: auth_service
     ports:
       - "8001:8001"
@@ -19,7 +19,7 @@ services:
       - recipe-network
 
   gateway:
-    image: psudomic/gateway:latest
+    image: deeaxfun2/gateway:latest
     container_name: gateway_service
     ports:
       - "8002:8002"
@@ -38,7 +38,7 @@ services:
 
 
   notification:
-    image: psudomic/notification:latest
+    image: deeaxfun2/notification:latest
     container_name: notification_service
     ports:
       - "8003:8003"
@@ -57,7 +57,7 @@ services:
 
 
   mealplan:
-    image: psudomic/mealplan:latest
+    image: deeaxfun2/mealplan:latest
     container_name: mealplan_service
     ports:
       - "8004:8004"
@@ -75,7 +75,7 @@ services:
       - recipe-network
 
   rating:
-    image: psudomic/rating:latest
+    image: deeaxfun2/rating:latest
     container_name: rating_service
     ports:
       - "8005:8005"
@@ -94,7 +94,7 @@ services:
 
 
   recipe:
-    image: psudomic/recipe:latest
+    image: deeaxfun2/recipe:latest
     container_name: recipe_service
     ports:
       - "8006:8006"
@@ -112,7 +112,7 @@ services:
       - recipe-network
 
   ingredient:
-    image: psudomic/ingredient:latest
+    image: deeaxfun2/ingredient:latest
     container_name: ingredient_service
     ports:
       - "8007:8007"

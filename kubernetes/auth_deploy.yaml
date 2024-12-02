@@ -17,7 +17,7 @@ spec:
       dnsPolicy: ClusterFirst
       containers:
       - name: auth
-        image: psudomic/auth:latest
+        image: eu-stockholm-1.ocir.io/axyklytnjcih/recipe-repo/auth:latest
         ports:
         - containerPort: 8001
         readinessProbe:
@@ -28,7 +28,10 @@ spec:
           periodSeconds: 5
         env:
         - name: RECIPE_SERVICE_HOST_URL
-          value: "http://127.0.0.1:53284/api/v1"
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: recipe
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
@@ -41,9 +44,12 @@ spec:
         - name: RABBITMQ_HOST
           value: "rabbitmq"
         - name: MYSQL_HOST
-          value: "127.0.0.1"
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-host
         - name: MYSQL_PORT
-          value: "3306"         
+          value: "3306"
         - name: MYSQL_NAME
           valueFrom:
             secretKeyRef:

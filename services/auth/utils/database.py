@@ -10,7 +10,7 @@ import os
 DB_USER = os.getenv("MYSQL_USER", "recipe_user")
 DB_PASSWORD = os.getenv("MYSQL_PASSWORD", "recipe_password")
 DB_HOST = os.getenv("MYSQL_HOST", "localhost")
-DB_PORT = "3306" #os.getenv("MYSQL_PORT", "3306")
+DB_PORT = os.getenv("MYSQL_PORT", "3306")
 DB_NAME = os.getenv("MYSQL_DATABASE", "recipe_db")
 MYSQL_ALLOW_EMPTY_PASSWORD=os.getenv("MYSQL_ALLOW_EMPTY_PASSWORD", "yes")
 

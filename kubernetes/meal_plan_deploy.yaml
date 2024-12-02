@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mealplan
-        image: psudomic/meal_plan:latest
+        image: eu-stockholm-1.ocir.io/axyklytnjcih/recipe-repo/meal_plan:latest
         ports:
         - containerPort: 8003
         readinessProbe:
@@ -27,9 +27,15 @@ spec:
           periodSeconds: 5
         env:
         - name: AUTH_SERVICE_HOST_URL
-          value: "http://127.0.0.1:53268/api/v1"
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: auth
         - name: RECIPE_SERVICE_HOST_URL
-          value: "http://127.0.0.1:53284/api/v1"
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: recipe
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
@@ -42,7 +48,10 @@ spec:
         - name: RABBITMQ_HOST
           value: "rabbitmq"
         - name: MYSQL_HOST
-          value: "127.0.0.1:53270"  # MySQL service name
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-host
         - name: MYSQL_PORT
           value: "3306"        # MySQL default port
         - name: MYSQL_NAME

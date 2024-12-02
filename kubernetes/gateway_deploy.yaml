@@ -16,22 +16,40 @@ spec:
     spec:
       containers:
       - name: gateway
-        image: psudomic/gateway:latest
+        image: eu-stockholm-1.ocir.io/axyklytnjcih/recipe-repo/gateway:latest
         ports:
         - containerPort: 8000
         env:
         - name: AUTH_SERVICE_HOST_URL
-          value: "http://127.0.0.1:53268/api/v1"  # Simplified service URL
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: auth
         - name: RECIPE_SERVICE_HOST_URL
-          value: "http://127.0.0.1:53284/api/v1"
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: recipe
         - name: INGREDIENT_SERVICE_HOST_URL
-          value: "http://127.0.0.1:53274/api/v1"
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: ingredient
         - name: MEALPLAN_SERVICE_HOST_URL
-          value: "http://127.0.0.1:53278/api/v1"
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: meal
         - name: RATING_SERVICE_HOST_URL
-          value: "http://127.0.0.1:53282/api/v1"
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: rating
         - name: NOTIFICATION_SERVICE_HOST_URL
-          value: "http://127.0.0.1:53280"
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: notification
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
@@ -44,7 +62,10 @@ spec:
         - name: RABBITMQ_HOST
           value: "rabbitmq"
         - name: MYSQL_HOST
-          value: "127.0.0.1:53270"
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-host
         - name: MYSQL_PORT
           value: "3306"
         - name: MYSQL_NAME
