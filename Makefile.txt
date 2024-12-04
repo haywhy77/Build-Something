@@ -1,6 +1,6 @@
 # Define variables for services and Docker registry
 SERVICES = auth gateway ingredient meal_plan rating recipe notification
-REGISTRY = deeaxfun2
+REGISTRY = psudomic
 
 # Default target
 .PHONY: all

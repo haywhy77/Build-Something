@@ -14,17 +14,16 @@ spec:
       labels:
         app: gateway
     spec:
+      # imagePullSecrets:
+      # - name: ocir-secret
       containers:
       - name: gateway
-        image: eu-stockholm-1.ocir.io/axyklytnjcih/recipe-repo/gateway:latest
+        image: psudomic/gateway:latest
         ports:
         - containerPort: 8000
         env:
         - name: AUTH_SERVICE_HOST_URL
-          valueFrom:
-            secretKeyRef:
-              name: db-secret
-              key: auth
+          value: "http://auth-service/api/v1"
         - name: RECIPE_SERVICE_HOST_URL
           valueFrom:
             secretKeyRef:
@@ -44,7 +43,7 @@ spec:
           valueFrom:
             secretKeyRef:
               name: db-secret
-              key: rating
+              key: ratings
         - name: NOTIFICATION_SERVICE_HOST_URL
           valueFrom:
             secretKeyRef:

@@ -14,9 +14,11 @@ spec:
       labels:
         app: mealplan
     spec:
+      # imagePullSecrets:
+      # - name: ocir-secret
       containers:
       - name: mealplan
-        image: eu-stockholm-1.ocir.io/axyklytnjcih/recipe-repo/meal_plan:latest
+        image: psudomic@/mealplan:latest
         ports:
         - containerPort: 8003
         readinessProbe:

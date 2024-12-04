@@ -14,9 +14,11 @@ spec:
       labels:
         app: notification
     spec:
+      # imagePullSecrets:
+      # - name: ocir-secret
       containers:
       - name: notification
-        image: eu-stockholm-1.ocir.io/axyklytnjcih/recipe-repo/notification:latest
+        image: psudomic/notification:latest
         ports:
         - containerPort: 8004
         readinessProbe:
