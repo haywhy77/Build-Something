@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mealplan-deployment
+  labels:
+    app: mealplan
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mealplan
+  template:
+    metadata:
+      labels:
+        app: mealplan
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: mealplan
+        image: deeaxfun2/mealplan:latest
+        ports:
+        - containerPort: 8003
+        readinessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 8003
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        - name: AUTH_SERVICE_HOST_URL
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: auth
+        - name: RECIPE_SERVICE_HOST_URL
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: recipe
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: jwt-secret
+        - name: ALGORITHM
+          value: "HS256"
+        - name: ACCESS_TOKEN_EXPIRE_MINUTES
+          value: "30" 
+        - name: RABBITMQ_HOST
+          value: "rabbitmq"
+        - name: MYSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-host
+        - name: MYSQL_PORT
+          value: "3306"        # MySQL default port
+        - name: MYSQL_NAME
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: database-name
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password

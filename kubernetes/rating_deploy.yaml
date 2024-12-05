@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rating-deployment
+  labels:
+    app: rating
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rating
+  template:
+    metadata:
+      labels:
+        app: rating
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: rating
+        image: deeaxfun2/rating:latest
+        ports:
+        - containerPort: 8005
+        readinessProbe:
+          httpGet:
+            path: /api/v1/health
+            port: 8005
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        env:
+        - name: RECIPE_SERVICE_HOST_URL
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: recipe
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: jwt-secret
+        - name: ALGORITHM
+          value: "HS256"
+        - name: ACCESS_TOKEN_EXPIRE_MINUTES
+          value: "30" 
+        - name: RABBITMQ_HOST
+          value: "rabbitmq"
+        - name: MYSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: db-host
+        - name: MYSQL_PORT
+          value: "3306"        # MySQL default port
+        - name: MYSQL_NAME
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: database-name
+        - name: MYSQL_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: user
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
